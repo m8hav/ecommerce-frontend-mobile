@@ -1,28 +1,29 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http_interceptor/http_interceptor.dart';
 import 'package:mobile/models/cart.dart';
-import 'package:mobile/utils/auth_utils.dart';
+import 'package:mobile/services/token_interceptor.dart';
 import 'package:mobile/utils/constants.dart';
+
+final client = HttpClientWithInterceptor.build(interceptors: [TokenInterceptor()]);
 
 // Get cart
 Future<Cart> getCart() async {
-  final response = await http.get(
+  final response = await client.get(
     Uri.parse('$backendBaseUrl/cart'),
-    headers: await getRequestHeaders(),
   );
   if (response.statusCode == 200) {
     return Cart.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load cart');
+    return Cart(id: -1, userId: -1, total: 0, cartProducts: []);
+    // throw Exception('Failed to load cart');
   }
 }
 
 // Add product to cart
 Future<Cart> addProductToCart(int productId) async {
-  final response = await http.post(
+  final response = await client.post(
     Uri.parse('$backendBaseUrl/cart/$productId'),
-    headers: await getRequestHeaders(),
   );
   if (response.statusCode == 200) {
     return Cart.fromJson(jsonDecode(response.body));
@@ -33,13 +34,12 @@ Future<Cart> addProductToCart(int productId) async {
 
 // Update product quantity in cart
 Future<Cart> updateProductQuantityInCart(int productId, int quantity) async {
-  final response = await http.put(
+  final response = await client.put(
     Uri.parse('$backendBaseUrl/cart'),
     body: jsonEncode({
       'productId': productId,
       'quantity': quantity,
     }),
-    headers: await getRequestHeaders(),
   );
   if (response.statusCode == 200) {
     return Cart.fromJson(jsonDecode(response.body));
@@ -50,9 +50,8 @@ Future<Cart> updateProductQuantityInCart(int productId, int quantity) async {
 
 // Remove product from cart
 Future<Cart> removeProductFromCart(int productId) async {
-  final response = await http.delete(
+  final response = await client.delete(
     Uri.parse('$backendBaseUrl/cart/$productId'),
-    headers: await getRequestHeaders(),
   );
   if (response.statusCode == 200) {
     return Cart.fromJson(jsonDecode(response.body));
@@ -63,9 +62,8 @@ Future<Cart> removeProductFromCart(int productId) async {
 
 // Clear cart
 Future<Cart> clearCart() async {
-  final response = await http.delete(
+  final response = await client.delete(
     Uri.parse('$backendBaseUrl/cart'),
-    headers: await getRequestHeaders(),
   );
   if (response.statusCode == 200) {
     return Cart.fromJson(jsonDecode(response.body));

@@ -30,9 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
+
   flutter_secure_storage: ^9.0.0
-  http: ^1.2.1
+#  http: ^1.2.1
+#  http_interceptor: ^2.0.0-beta.8
+#  http_interceptor: ^1.0.2
+  http_interceptor: ^0.4.1
   carousel_slider: ^4.2.1
 
   # The following adds the Cupertino Icons font to your application.

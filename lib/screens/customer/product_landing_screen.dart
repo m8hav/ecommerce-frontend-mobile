@@ -28,9 +28,15 @@ class _ProductLandingScreenState extends State<ProductLandingScreen> {
   Future<void> initialize() async {
     Product currentProduct = await getProductById(widget.productId);
     final Cart cart = await getCart();
+    // try {
+    //   cart = await getCart();
+    // }
+    // catch (e) {
+    //   cart = Cart(id: -1, userId: -1, total: 0, cartProducts: []);
+    // }
     setState(() {
       product = currentProduct;
-      isAlreadyInCart = cart.cartProducts
+      isAlreadyInCart = cart.cartProducts!
           .any((element) => element.productId == widget.productId);
     });
   }
@@ -58,38 +64,47 @@ class _ProductLandingScreenState extends State<ProductLandingScreen> {
                 const SizedBox(height: 16.0),
                 Text(
                   product!.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineSmall,
                 ), // Display product name
                 const SizedBox(height: 16.0),
                 Text(
                   product!.description,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyMedium,
                 ), // Display product description
                 const SizedBox(height: 16.0),
                 Text(
                   '\$${product!.price.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge,
                 ),
                 const SizedBox(height: 16.0),
                 product!.stock > 0
                     ? ElevatedButton(
-                        onPressed: () async {
-                          if (!isAlreadyInCart) {
-                            await addProductToCart(product!.id);
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const MainNavigationHub(page: 1),
-                            ),
-                          );
-                        },
-                        child: Text(
-                            isAlreadyInCart ? 'Go to Cart' : 'Add to Cart'),
-                      )
+                  onPressed: () async {
+                    if (!isAlreadyInCart) {
+                      await addProductToCart(product!.id);
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                        const MainNavigationHub(page: 1),
+                      ),
+                    );
+                  },
+                  child: Text(
+                      isAlreadyInCart ? 'Go to Cart' : 'Add to Cart'),
+                )
                     : ElevatedButton(
-                        onPressed: () {}, child: const Text('Out of Stock')),
+                    onPressed: () {}, child: const Text('Out of Stock')),
               ],
             ),
           ),

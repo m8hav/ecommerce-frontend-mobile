@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/components/product_card.dart';
 import 'package:mobile/models/product.dart';
-import 'package:mobile/screens/customer/product_landing_screen.dart';
+import 'package:mobile/screens/admin/add_product_screen.dart';
 import 'package:mobile/services/product_service.dart';
 
 import '../../utils/auth_utils.dart';
@@ -65,6 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }).toList(),
                 ),
+              if (userRole == 'ADMIN')
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddProductScreen())),
+                    child: const Text("Add Product"),
+                  ),
+                ),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -91,42 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return Card(
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 160,
-                            child: Image.network(snapshot.data![index].imageUrl,
-                                fit: BoxFit.contain),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            snapshot.data![index].name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                              '\$${snapshot.data![index].price.toStringAsFixed(2)}'),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductLandingScreen(
-                                    productId: snapshot.data![index].id,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text('View'),
-                          ),
-                        ],
-                      ),
-                    );
+                    return ProductCard(
+                        index: index, snapshot: snapshot, userRole: userRole!);
                   },
                   childCount: snapshot.data!.length,
                 ),

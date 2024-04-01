@@ -120,8 +120,6 @@ class _ProductListItemState extends State<ProductListItem> {
                   icon: const Icon(Icons.delete),
                   iconSize: 20,
                   onPressed: () async {
-                    print(
-                        "product id being removed from cart: ${widget.productInfo.productId}");
                     await removeProductFromCart(widget.productInfo.productId);
                     widget.refreshCart!();
                   },

@@ -1,16 +1,17 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http_interceptor/http_interceptor.dart';
 
 import 'package:mobile/models/user.dart';
-import 'package:mobile/utils/auth_utils.dart';
+import 'package:mobile/services/token_interceptor.dart';
 import 'package:mobile/utils/constants.dart';
+
+final client = HttpClientWithInterceptor.build(interceptors: [TokenInterceptor()]);
 
 // GET User
 Future<User> getUser() async {
-  final response = await http.get(
+  final response = await client.get(
     Uri.parse('$backendBaseUrl/user'),
-    headers: await getRequestHeaders(),
   );
 
   if (response.statusCode == 200) {
@@ -22,10 +23,9 @@ Future<User> getUser() async {
 
 // Update User
 Future<User> updateUser(User user) async {
-  final response = await http.put(
+  final response = await client.put(
     Uri.parse('$backendBaseUrl/user'),
     body: jsonEncode(user),
-    headers: await getRequestHeaders(),
   );
 
   if (response.statusCode == 200) {
@@ -37,9 +37,8 @@ Future<User> updateUser(User user) async {
 
 // Delete User
 Future deleteUser() async {
-  final response = await http.delete(
+  final response = await client.delete(
     Uri.parse('$backendBaseUrl/user'),
-    headers: await getRequestHeaders(),
   );
 
   if (response.statusCode == 200) {

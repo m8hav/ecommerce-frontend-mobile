@@ -54,7 +54,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           content: Text('Failed to place order'),
         ),
       );
-      print(e);
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class EditProductScreen extends StatefulWidget {
-  const EditProductScreen({super.key});
+  const EditProductScreen({super.key, required this.productId});
+
+  final int productId;
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
@@ -10,6 +12,13 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Product'),
+      ),
+      body: const Center(
+        child: Text('Edit Product'),
+      ),
+    );
   }
 }
